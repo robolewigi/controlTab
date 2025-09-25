@@ -1,0 +1,11 @@
+{
+  "vosk": "vosk-model-en-us-0.22-lgraph",
+  "showText": true,
+  "characterKey": ["b", "t", "f"],
+  "toggleWord": "listen",
+  "#V modifiers:0-ctrl 1-shift 2-alt 3-cmd V": null,
+  "modifierKey": 0,
+  "#V 0;string 1;string;ctrlShiftAltCmd 2(mouse);x;y 3(set);x;y 4;lmbRmbMmb 5;loopTimesLeft V": null,
+  "commands": [["the", ["0;"]], ["control said", ["1;z;0"]], ["move mouse !n right !n down", ["2;!n;!n"]], ["left mouse button", ["4;0"]], ["semi colon", ["0;!!"]], ["main menu", ["3;0;9999", "4;0"]], ["times !n then", ["5;!n"]]],
+  "onOffSounds": ["/usr/share/sounds/sound-icons/pisk-up.wav", "/usr/share/sounds/sound-icons/pisk-down.wav"]
+ }
