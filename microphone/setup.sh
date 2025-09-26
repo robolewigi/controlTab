@@ -10,13 +10,30 @@ case $yn in
    DESKTOP_FILE="$APP_NAME.desktop"
 
    sudo apt update
-   sudo apt install -y libasound2 libportaudio2 libportaudiocpp0 \
+
+   # Handle libasound2 vs libasound2t64
+   if apt-cache show libasound2 >/dev/null 2>&1; then
+     ALSA_PKG="libasound2"
+   else
+     ALSA_PKG="libasound2t64"
+   fi
+
+   sudo apt install -y $ALSA_PKG libportaudio2 libportaudiocpp0 \
     ffmpeg libnss3 libx11-6 libxtst6 libxrender1 libxext6 \
     libglib2.0-0 libudev1 alsa-utils unzip wget
 
-   # Ask user which terminal to use
+   # Ask user which terminal to use, fallback to available one
    read -p "Enter terminal to use [gnome-terminal]: " user_terminal
    TERMINAL=${user_terminal:-gnome-terminal}
+
+   if ! command -v "$TERMINAL" >/dev/null 2>&1; then
+     for term in gnome-terminal konsole xfce4-terminal xterm; do
+       if command -v "$term" >/dev/null 2>&1; then
+         TERMINAL=$term
+         break
+       fi
+     done
+   fi
 
    # Decide Exec line based on terminal
    case $TERMINAL in
@@ -29,8 +46,10 @@ case $yn in
      xfce4-terminal)
        EXEC_LINE="$TERMINAL --command=\"bash -c '$install_path/conTabMic; exec bash'\""
        ;;
+     xterm)
+       EXEC_LINE="$TERMINAL -e bash -c '$install_path/conTabMic; exec bash'"
+       ;;
      *)
-       # Default fallback
        EXEC_LINE="$TERMINAL -- bash -c '$install_path/conTabMic; exec bash'"
        ;;
    esac
