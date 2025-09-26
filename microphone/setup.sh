@@ -4,10 +4,15 @@ APP_NAME="microphoneConTab"
 install_path="$(pwd)"   # default = current folder
 
 # Prompt for desktop file
-read -p "Create .desktop file? (y/n) " yn
+read -p "Create .desktop file and dependencies (y/n) " yn
 case $yn in
  y|Y )
    DESKTOP_FILE="$APP_NAME.desktop"
+
+   sudo apt update
+   sudo apt install -y libasound2 libportaudio2 libportaudiocpp0 \
+    ffmpeg libnss3 libx11-6 libxtst6 libxrender1 libxext6 \
+    libglib2.0-0 libudev1 alsa-utils unzip wget
 
    # Ask user which terminal to use
    read -p "Enter terminal to use [gnome-terminal]: " user_terminal
