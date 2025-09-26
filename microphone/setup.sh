@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APP_NAME="conTabMic"
+APP_NAME="microphoneConTab"
 install_path="$(pwd)"   # default = current folder
 
 # Prompt for desktop file
@@ -9,19 +9,41 @@ case $yn in
  y|Y )
    DESKTOP_FILE="$APP_NAME.desktop"
 
+   # Ask user which terminal to use
+   read -p "Enter terminal to use [gnome-terminal]: " user_terminal
+   TERMINAL=${user_terminal:-gnome-terminal}
+
+   # Decide Exec line based on terminal
+   case $TERMINAL in
+     gnome-terminal)
+       EXEC_LINE="$TERMINAL -- bash -c '$install_path/conTabMic; exec bash'"
+       ;;
+     konsole)
+       EXEC_LINE="$TERMINAL -e bash -c '$install_path/conTabMic; exec bash'"
+       ;;
+     xfce4-terminal)
+       EXEC_LINE="$TERMINAL --command=\"bash -c '$install_path/conTabMic; exec bash'\""
+       ;;
+     *)
+       # Default fallback
+       EXEC_LINE="$TERMINAL -- bash -c '$install_path/conTabMic; exec bash'"
+       ;;
+   esac
+
    cat > "$DESKTOP_FILE" <<EOL
 [Desktop Entry]
 Name=$APP_NAME
-Exec=$install_path/$APP_NAME
+Exec=$EXEC_LINE
 Icon=$install_path/icon.png
 Type=Application
 Categories=Utility;
-Terminal=true
+Terminal=false
 EOL
 
    mkdir -p ~/.local/share/applications
    mv "$DESKTOP_FILE" ~/.local/share/applications/
    chmod +x ~/.local/share/applications/$DESKTOP_FILE
+   echo "Desktop file created at ~/.local/share/applications/$DESKTOP_FILE"
    ;;
  * )
    echo "Skipping desktop file."
