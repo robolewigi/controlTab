@@ -38,19 +38,19 @@ case $yn in
    # Decide Exec line based on terminal
    case $TERMINAL in
      gnome-terminal)
-       EXEC_LINE="$TERMINAL -- bash -c '$install_path/conTabMic; exec bash'"
+       EXEC_LINE="$TERMINAL -- bash -c '$install_path/main; exec bash'"
        ;;
      konsole)
-       EXEC_LINE="$TERMINAL -e bash -c '$install_path/conTabMic; exec bash'"
+       EXEC_LINE="$TERMINAL -e bash -c '$install_path/main; exec bash'"
        ;;
      xfce4-terminal)
-       EXEC_LINE="$TERMINAL --command=\"bash -c '$install_path/conTabMic; exec bash'\""
+       EXEC_LINE="$TERMINAL --command=\"bash -c '$install_path/main; exec bash'\""
        ;;
      xterm)
-       EXEC_LINE="$TERMINAL -e bash -c '$install_path/conTabMic; exec bash'"
+       EXEC_LINE="$TERMINAL -e bash -c '$install_path/main; exec bash'"
        ;;
      *)
-       EXEC_LINE="$TERMINAL -- bash -c '$install_path/conTabMic; exec bash'"
+       EXEC_LINE="$TERMINAL -- bash -c '$install_path/main; exec bash'"
        ;;
    esac
 

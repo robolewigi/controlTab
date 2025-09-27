@@ -1,4 +1,4 @@
-import vosk,queue,json,os,time,psutil
+import vosk,queue,json,os,time,psutil,sys
 import threading
 import numpy as np
 import sounddevice as sd
@@ -6,7 +6,9 @@ from collections import deque
 from pynput.mouse import Button, Controller as MouseController
 from pynput.keyboard import Controller, Key, Listener
 from word2number import w2n
-basePath = os.path.dirname(os.path.abspath(__file__))
+
+if getattr(sys, 'frozen', False): basePath = os.path.dirname(sys.executable)
+else: basePath = os.path.dirname(os.path.abspath(__file__))
 
 keyboard = Controller()
 mouse = MouseController()
@@ -187,6 +189,7 @@ toggleWord: {v.toggleWord}
 """
 
 def saveFunc():
+ savePath= os.path.join(basePath, "save.json")
  save = f"""{{
   "vosk": {json.dumps(v.modelPath)},
   "showText": {json.dumps(v.showText)},
@@ -198,8 +201,9 @@ def saveFunc():
   "commands": {json.dumps(v.voiceCommands)},
   "onOffSounds": {json.dumps(v.sounds)}
  }}"""
- with open("save.json", "w") as f:
+ with open(savePath, "w") as f:
     f.write(save)
+ print(savePath)
 def loadSave():
  if not os.path.exists("save.json") or os.stat("save.json").st_size == 0:
   saveFunc()
@@ -224,12 +228,10 @@ loadSave()
 vosk.SetLogLevel(-1)
 try: v.model = vosk.Model(v.modelPath)
 except:
+ print("cannot find model at ",v.modelPath)
  path = input("Vosk model not found. Enter path: ").strip()
  v.model = vosk.Model(path)
  saveFunc()
-
-text=input("")
-textConvert(text)
 
 print(helpCommand())
 v.used = True
